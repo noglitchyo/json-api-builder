@@ -6,7 +6,7 @@ use JsonSerializable;
 
 interface ResourceObjectInterface extends JsonSerializable
 {
-    public static function getJsonApiType(): string;
+    public function getJsonApiType(): string;
 
     public function getJsonApiId(): string;
 

@@ -2,6 +2,8 @@
 
 namespace NoGlitchYo\JsonApiBuilder\Traits;
 
+use NoGlitchYo\JsonApiBuilder\Definition\ResourceObjectInterface;
+
 trait ResourceObjectTrait
 {
     public function getJsonAttributes(): array
@@ -26,7 +28,7 @@ trait ResourceObjectTrait
 
     public function jsonSerialize(): array
     {
-        /** @var \NoGlitchYo\JsonApiBuilder\Definition\ResourceObjectInterface $this */
+        /** @var ResourceObjectInterface $this */
         return [
             'attributes'    => $this->getJsonAttributes(),
             'id'            => $this->getJsonApiId(),

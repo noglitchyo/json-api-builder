@@ -11,9 +11,21 @@ class Document implements DocumentInterface
      * @var array|null
      */
     private $meta = [];
+
+    /**
+     * @var array
+     */
     private $errors = [];
-    private $data  = [];
-    private $included;
+
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * @var array
+     */
+    private $included = [];
 
     public function __construct($meta = [], $errors = [], $data = [])
     {
@@ -21,6 +33,27 @@ class Document implements DocumentInterface
         $this->errors = $errors;
         $this->data = $data;
     }
+
+    public function getMeta(): array
+    {
+        return $this->meta;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function getIncluded(): array
+    {
+        return $this->included;
+    }
+
 
     public function withMeta($meta): DocumentInterface
     {
