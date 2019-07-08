@@ -57,38 +57,39 @@ class Document implements DocumentInterface
 
     public function withMeta($meta): DocumentInterface
     {
-        $response = clone $this;
-        $response->meta = $meta;
+        $document = clone $this;
+        $document->meta = $meta;
 
-        return $response;
+        return $document;
     }
 
     public function withErrors(array $errors): DocumentInterface
     {
-        $response = clone $this;
-        $response->errors = $errors;
+        $document = clone $this;
+        $document->errors = $errors;
 
-        return $response;
+        return $document;
     }
 
     public function withData($data): DocumentInterface
     {
+        die('ee');
         if (is_object($data) && !$data instanceof JsonSerializable) {
             throw new InvalidArgumentException('Must be an instance of ' . JsonSerializable::class);
         }
 
-        $response = clone $this;
-        $response->data = $data;
+        $document = clone $this;
+        $document->data = $data;
 
-        return $response;
+        return $document;
     }
 
     public function withIncluded($included): DocumentInterface
     {
-        $response = clone $this;
-        $response->included = $included;
+        $document = clone $this;
+        $document->included = $included;
 
-        return $response;
+        return $document;
     }
 
     public function __toString(): string
