@@ -73,7 +73,6 @@ class Document implements DocumentInterface
 
     public function withData($data): DocumentInterface
     {
-        die('ee');
         if (is_object($data) && !$data instanceof JsonSerializable) {
             throw new InvalidArgumentException('Must be an instance of ' . JsonSerializable::class);
         }
