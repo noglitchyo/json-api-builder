@@ -7,15 +7,14 @@ use NoGlitchYo\JsonApiBuilder\Entity\ComputedResourceObject;
 use NoGlitchYo\JsonApiBuilder\Processor\LinksProcessor;
 use NoGlitchYo\JsonApiBuilder\Processor\RelationshipsProcessor;
 use NoGlitchYo\JsonApiBuilder\Processor\ResourceObjectProcessor;
-use NoGlitchYo\JsonApiBuilder\Traits\ResourceObjectTrait;
+use NoGlitchYo\JsonApiBuilder\Tests\GetResourceObjectTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \NoGlitchYo\JsonApiBuilder\Processor\ResourceObjectProcessor
- */
 class ResourceObjectProcessorTest extends TestCase
 {
+    use GetResourceObjectTrait;
+
     /**
      * @var RelationshipsProcessor|MockObject
      */
@@ -102,7 +101,7 @@ class ResourceObjectProcessorTest extends TestCase
             'attribute_test_1' => 'value_1',
         ];
         $relationships = [
-            'relationship_name'
+            'relationship_name',
         ];
         $links         = [
             ['self' => '/some/link'],
@@ -113,82 +112,19 @@ class ResourceObjectProcessorTest extends TestCase
 
         return [
             [
-                'resource'      => static::getResourceObject($attributes, $relationships, $links, $meta),
-                'attributes'    => $attributes,
+                'resource' => static::getResourceObject(
+                    'json_api_type',
+                    'json_api_id',
+                    $attributes,
+                    $relationships,
+                    $links,
+                    $meta
+                ),
+                'attributes' => $attributes,
                 'relationships' => $relationships,
-                'links'         => $links,
-                'meta'          => $meta,
+                'links' => $links,
+                'meta' => $meta,
             ],
         ];
-    }
-
-    public static function getResourceObject(
-        array $attributes,
-        array $relationships,
-        array $links,
-        array $meta
-    ): ResourceObjectInterface {
-        return new class($attributes, $relationships, $links, $meta) implements ResourceObjectInterface
-        {
-            use ResourceObjectTrait;
-
-            /**
-             * @var array
-             */
-            private $relationships;
-
-            /**
-             * @var array
-             */
-            private $links;
-
-            /**
-             * @var array
-             */
-            private $meta;
-
-            /**
-             * @var array
-             */
-            private $attributes;
-
-            public function __construct(array $attributes, array $relationships, array $links, array $meta)
-            {
-                $this->attributes    = $attributes;
-                $this->relationships = $relationships;
-                $this->links         = $links;
-                $this->meta          = $meta;
-            }
-
-            public function getJsonAttributes(): array
-            {
-                return $this->attributes;
-            }
-
-            public function getJsonApiRelationShips(): array
-            {
-                return $this->relationships;
-            }
-
-            public function getJsonApiLinks(): array
-            {
-                return $this->links;
-            }
-
-            public function getJsonApiMeta(): array
-            {
-                return $this->meta;
-            }
-
-            public function getJsonApiType(): string
-            {
-                return 'json_api_type';
-            }
-
-            public function getJsonApiId(): string
-            {
-                return 'json_api_id';
-            }
-        };
     }
 }

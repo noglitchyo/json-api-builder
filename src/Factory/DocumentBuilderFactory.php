@@ -3,36 +3,42 @@
 namespace NoGlitchYo\JsonApiBuilder\Factory;
 
 use NoGlitchYo\JsonApiBuilder\Builder\DocumentBuilder;
-use NoGlitchYo\JsonApiBuilder\Processor\ResourceObjectProcessor;
 use NoGlitchYo\JsonApiBuilder\Processor\IncludedResourceProcessor;
+use NoGlitchYo\JsonApiBuilder\Processor\ResourceObjectProcessor;
 
 class DocumentBuilderFactory
 {
     /**
      * @var IncludedResourceProcessor
      */
-    private $jsonApiSerializer;
+    private $includedResourceProcessor;
+
     /**
      * @var ResourceObjectProcessor
      */
     private $resourceObjectProcessor;
+
     /**
      * @var DocumentFactory
      */
     private $documentFactory;
 
     public function __construct(
-        IncludedResourceProcessor $jsonApiSerializer,
+        IncludedResourceProcessor $includedResourceProcessor,
         ResourceObjectProcessor $resourceObjectProcessor,
         DocumentFactory $documentFactory
     ) {
-        $this->jsonApiSerializer = $jsonApiSerializer;
-        $this->resourceObjectProcessor = $resourceObjectProcessor;
-        $this->documentFactory = $documentFactory;
+        $this->includedResourceProcessor = $includedResourceProcessor;
+        $this->resourceObjectProcessor   = $resourceObjectProcessor;
+        $this->documentFactory           = $documentFactory;
     }
 
     public function create(): DocumentBuilder
     {
-        return new DocumentBuilder($this->jsonApiSerializer, $this->resourceObjectProcessor, $this->documentFactory);
+        return new DocumentBuilder(
+            $this->includedResourceProcessor,
+            $this->resourceObjectProcessor,
+            $this->documentFactory
+        );
     }
 }

@@ -41,14 +41,19 @@ class DocumentBuilder
      */
     private $resourceObjectProcessor;
 
+    /**
+     * @var array
+     */
+    private $metaObjects;
+
     public function __construct(
         IncludedResourceProcessor $includedResourceProcessor,
         ResourceObjectProcessor $resourceObjectProcessor,
         DocumentFactory $documentFactory
     ) {
         $this->includedResourceProcessor = $includedResourceProcessor;
-        $this->documentFactory = $documentFactory;
-        $this->resourceObjectProcessor = $resourceObjectProcessor;
+        $this->documentFactory           = $documentFactory;
+        $this->resourceObjectProcessor   = $resourceObjectProcessor;
     }
 
     public function addResourceObject(ResourceObjectInterface $resourceObject): self
@@ -99,6 +104,13 @@ class DocumentBuilder
         return $this;
     }
 
+    public function addMeta(array $meta): self
+    {
+        $this->metaObjects[] = $meta;
+
+        return $this;
+    }
+
     public function build(): DocumentInterface
     {
         $document = $this->documentFactory->create();
@@ -113,6 +125,10 @@ class DocumentBuilder
 
         if (!empty($this->errorObjects)) {
             $document = $this->buildErrorObjects($document);
+        }
+
+        if (!empty($this->metaObjects)) {
+            $document = $this->buildMetaObject($document);
         }
 
         return $document;
@@ -141,12 +157,17 @@ class DocumentBuilder
         $errors = [];
         foreach ($this->errorObjects as $errorObject) {
             $errors[] = [
-                'title'  => $errorObject->getTitle(),
+                'title' => $errorObject->getTitle(),
                 'detail' => $errorObject->getDetail(),
-                'code'   => $errorObject->getCode(),
+                'code' => $errorObject->getCode(),
                 'status' => $errorObject->getStatus(),
             ];
         }
         return $document->withErrors($errors);
+    }
+
+    private function buildMetaObject(DocumentInterface $document): DocumentInterface
+    {
+        return $document->withMeta($this->metaObjects);
     }
 }

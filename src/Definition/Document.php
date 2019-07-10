@@ -3,12 +3,13 @@
 namespace NoGlitchYo\JsonApiBuilder\Definition;
 
 use InvalidArgumentException;
+use const JSON_THROW_ON_ERROR;
 use JsonSerializable;
 
 class Document implements DocumentInterface
 {
     /**
-     * @var array|null
+     * @var array
      */
     private $meta = [];
 
@@ -18,7 +19,7 @@ class Document implements DocumentInterface
     private $errors = [];
 
     /**
-     * @var array
+     * @var array|JsonSerializable
      */
     private $data;
 
@@ -29,9 +30,9 @@ class Document implements DocumentInterface
 
     public function __construct($meta = [], $errors = [], $data = [])
     {
-        $this->meta = $meta;
+        $this->meta   = $meta;
         $this->errors = $errors;
-        $this->data = $data;
+        $this->data   = $data;
     }
 
     public function getMeta(): array
@@ -44,7 +45,10 @@ class Document implements DocumentInterface
         return $this->errors;
     }
 
-    public function getData(): array
+    /**
+     * @return array|JsonSerializable
+     */
+    public function getData()
     {
         return $this->data;
     }
@@ -56,7 +60,7 @@ class Document implements DocumentInterface
 
     public function withMeta($meta): DocumentInterface
     {
-        $document = clone $this;
+        $document       = clone $this;
         $document->meta = $meta;
 
         return $document;
@@ -64,27 +68,34 @@ class Document implements DocumentInterface
 
     public function withErrors(array $errors): DocumentInterface
     {
-        $document = clone $this;
+        $document         = clone $this;
         $document->errors = $errors;
 
         return $document;
     }
 
+    /**
+     * @param array|JsonSerializable $data
+     *
+     * @return DocumentInterface
+     */
     public function withData($data): DocumentInterface
     {
-        if (is_object($data) && !$data instanceof JsonSerializable) {
-            throw new InvalidArgumentException('Must be an instance of ' . JsonSerializable::class);
+        if (!is_array($data)) {
+            if (!$data instanceof JsonSerializable) { // phpstan does not understand when on the same line
+                throw new InvalidArgumentException('Must be an instance of ' . JsonSerializable::class);
+            }
         }
 
-        $document = clone $this;
+        $document       = clone $this;
         $document->data = $data;
 
         return $document;
     }
 
-    public function withIncluded($included): DocumentInterface
+    public function withIncluded(array $included): DocumentInterface
     {
-        $document = clone $this;
+        $document           = clone $this;
         $document->included = $included;
 
         return $document;
@@ -92,21 +103,21 @@ class Document implements DocumentInterface
 
     public function __toString(): string
     {
-        return json_encode($this);
+        return json_encode($this, JSON_THROW_ON_ERROR);
     }
 
     public function jsonSerialize(): array
     {
-        $response = [
-            'meta'   => $this->meta,
+        $document = [
+            'meta' => $this->meta,
             'errors' => $this->errors,
-            'data'   => $this->data,
+            'data' => $this->data,
         ];
 
         if ($this->included) {
-            $response['included'] = $this->included;
+            $document['included'] = $this->included;
         }
 
-        return $response;
+        return $document;
     }
 }

@@ -40,7 +40,7 @@ interface DocumentInterface extends JsonSerializable
      */
     public function withErrors(array $errors): self;
 
-    public function getData(): array;
+    public function getData();
 
     /**
      * Return an instance with the specified data.
@@ -48,6 +48,10 @@ interface DocumentInterface extends JsonSerializable
      * This method MUST be implemented in such a way as to retain the
      * immutability of the document, and MUST return an instance that has the
      * updated data member.
+     *
+     * @param array|JsonSerializable $data
+     *
+     * @return DocumentInterface
      */
     public function withData($data): self;
 
@@ -59,6 +63,10 @@ interface DocumentInterface extends JsonSerializable
      * This method MUST be implemented in such a way as to retain the
      * immutability of the document, and MUST return an instance that has the
      * updated included member.
+     *
+     * @param array $included
+     *
+     * @return DocumentInterface
      */
-    public function withIncluded($included): self;
+    public function withIncluded(array $included): self;
 }

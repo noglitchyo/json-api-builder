@@ -99,6 +99,7 @@ class DocumentBuilderTest extends TestCase
     {
         $resourceObjects = [static::$resourceObject];
         $expectedIncluded = [static::$relationshipObject];
+        $expectedMeta = [['meta_test' => 'value']];
         $expectedDocumentErrors = [
             [
                 'title' => static::$errorObject->getTitle(),
@@ -111,6 +112,7 @@ class DocumentBuilderTest extends TestCase
         $this->sut = $this->sut
             ->addResourceObjects($resourceObjects)
             ->addIncludes($this->includes)
+            ->addMeta(['meta_test' => 'value'])
             ->addErrors([static::$errorObject]);
 
         $newDocument = new Document();
@@ -138,6 +140,17 @@ class DocumentBuilderTest extends TestCase
         $this->assertEquals($resourceObjects, $document->getData());
         $this->assertEquals($expectedIncluded, $document->getIncluded());
         $this->assertEquals($expectedDocumentErrors, $document->getErrors());
+        $this->assertEquals($expectedMeta, $document->getMeta());
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'meta' => $expectedMeta,
+                'errors' => $expectedDocumentErrors,
+                'data' => $resourceObjects,
+                'included' => $expectedIncluded
+            ]),
+            (string)$document
+        );
     }
 
     public static function getResourceObject(ResourceObjectInterface $relationship): ResourceObjectInterface

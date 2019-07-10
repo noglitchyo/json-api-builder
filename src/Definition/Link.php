@@ -2,9 +2,6 @@
 
 namespace NoGlitchYo\JsonApiBuilder\Definition;
 
-/**
- * @codeCoverageIgnore
- */
 class Link implements LinkInterface
 {
     public function getHref(): string
@@ -15,5 +12,13 @@ class Link implements LinkInterface
     public function getMeta(): array
     {
         return [];
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'href' => $this->getHref(),
+            'meta' => $this->getMeta()
+        ];
     }
 }

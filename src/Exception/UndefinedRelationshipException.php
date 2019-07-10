@@ -5,6 +5,9 @@ namespace NoGlitchYo\JsonApiBuilder\Exception;
 use NoGlitchYo\JsonApiBuilder\Definition\ResourceObjectInterface;
 use OutOfBoundsException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UndefinedRelationshipException extends OutOfBoundsException
 {
     public function __construct($relationshipsNames, ResourceObjectInterface $resourceObject)

@@ -2,10 +2,12 @@
 
 namespace NoGlitchYo\JsonApiBuilder\Definition;
 
+use JsonSerializable;
+
 /**
  * @codeCoverageIgnore
  */
-interface LinkInterface
+interface LinkInterface extends JsonSerializable
 {
     public function getHref(): string;
 

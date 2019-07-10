@@ -5,6 +5,9 @@ namespace NoGlitchYo\JsonApiBuilder\Exception;
 use Exception;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UndefinedRelationshipDataException extends Exception
 {
     public function __construct(string $relationshipName, Throwable $previous = null)
