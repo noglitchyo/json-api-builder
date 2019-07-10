@@ -23,16 +23,19 @@ class ResourceObjectProcessor
         LinksProcessor $linksProcessor,
         RelationshipsProcessor $relationshipsProcessor
     ) {
-        $this->linksProcessor = $linksProcessor;
+        $this->linksProcessor         = $linksProcessor;
         $this->relationshipsProcessor = $relationshipsProcessor;
     }
 
     public function process(ResourceObjectInterface $resourceObject): ResourceObjectInterface
     {
+        $computedRelationships = $this->relationshipsProcessor->process($resourceObject);
+        $computedLinks         = $this->linksProcessor->process($resourceObject);
+
         return new ComputedResourceObject(
             $resourceObject,
-            $this->relationshipsProcessor->process($resourceObject),
-            $this->linksProcessor->process($resourceObject)
+            $computedRelationships,
+            $computedLinks
         );
     }
 }

@@ -53,13 +53,13 @@ class ComputedResourceObject implements ResourceObjectInterface
     {
         $attributes = array_diff_key(
             $this->wrappedEntity->getJsonAttributes(),
-            $this->wrappedEntity->getJsonApiRelationShips()
+            $this->wrappedEntity->getJsonApiRelationships()
         );
 
         return $attributes;
     }
 
-    public function getJsonApiRelationShips(): array
+    public function getJsonApiRelationships(): array
     {
         return $this->computedRelationships;
     }

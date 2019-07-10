@@ -28,8 +28,9 @@ class Links implements LinksInterface
     {
         $this->apiUri = $apiUri;
         $this->resourceObject = $resourceObject;
-
-        $this->self = $this->apiUri . '/' . $this->resourceObject->getJsonApiType() . '/' . $this->resourceObject->getJsonApiId();
+        $this->self = $this->apiUri . '/' .
+            $this->resourceObject->getJsonApiType() . '/' .
+            $this->resourceObject->getJsonApiId();
         $this->related = new Link();
     }
 
@@ -47,7 +48,7 @@ class Links implements LinksInterface
     {
         return [
             'related' => $this->related,
-            'self' => $this->self
+            'self'    => $this->self,
         ];
     }
 }
