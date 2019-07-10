@@ -3,7 +3,7 @@
 namespace NoGlitchYo\JsonApiBuilder\Processor;
 
 use NoGlitchYo\JsonApiBuilder\Definition\ResourceObjectInterface;
-use Exception;
+use NoGlitchYo\JsonApiBuilder\Exception\UndefinedRelationshipDataException;
 
 class RelationshipsProcessor
 {
@@ -21,26 +21,32 @@ class RelationshipsProcessor
     {
         $relationships = [];
 
-        foreach ($resourceObject->getJsonApiRelationShips() as $relationshipName => $relationship) {
-            if (!isset($resourceObject->getJsonAttributes()[$relationshipName])) {
-                throw new Exception(
-                    'Key for relationship not found in attributes. Please define a matching key name for the relationship.'
-                );
+        foreach ($resourceObject->getJsonApiRelationships() as $relationshipName) {
+            if (!array_key_exists($relationshipName, $resourceObject->getJsonAttributes())) {
+                throw new UndefinedRelationshipDataException($relationshipName);
             }
 
             $relationData = $resourceObject->getJsonAttributes()[$relationshipName];
 
-            $relationships[$relationshipName] = [
-                'data'  => $this->processRelationshipData($relationData),
-                'links' => $this->linksProcessor->processRelationship($relationshipName, $resourceObject),
-            ];
+            $relationships[$relationshipName]['data'] = $this->processRelationshipData($relationData);
+
+            if (!empty($relationData)) {
+                $relationships[$relationshipName]['links'] = $this->linksProcessor->processRelationship(
+                    $relationshipName,
+                    $resourceObject
+                );
+            }
         }
 
         return $relationships;
     }
 
-    private function processRelationshipData($relationData): array
+    private function processRelationshipData($relationData)
     {
+        if ($relationData === null) {
+            return null;
+        }
+
         if (is_array($relationData)) {
             $relationResourceIdentifiers = [];
             foreach ($relationData as $entity) {
@@ -57,7 +63,7 @@ class RelationshipsProcessor
     {
         return [
             'type' => $resourceObject->getJsonApiType(),
-            'id'   => $resourceObject->getJsonApiId(),
+            'id' => $resourceObject->getJsonApiId(),
         ];
     }
 }

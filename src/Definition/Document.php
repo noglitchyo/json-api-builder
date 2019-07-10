@@ -54,7 +54,6 @@ class Document implements DocumentInterface
         return $this->included;
     }
 
-
     public function withMeta($meta): DocumentInterface
     {
         $document = clone $this;
@@ -99,9 +98,9 @@ class Document implements DocumentInterface
     public function jsonSerialize(): array
     {
         $response = [
-            'meta' => $this->meta,
+            'meta'   => $this->meta,
             'errors' => $this->errors,
-            'data' => $this->data,
+            'data'   => $this->data,
         ];
 
         if ($this->included) {

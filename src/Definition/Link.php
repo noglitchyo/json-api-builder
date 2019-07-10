@@ -2,6 +2,9 @@
 
 namespace NoGlitchYo\JsonApiBuilder\Definition;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Link implements LinkInterface
 {
     public function getHref(): string

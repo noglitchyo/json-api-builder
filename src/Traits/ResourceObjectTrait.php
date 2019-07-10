@@ -33,7 +33,7 @@ trait ResourceObjectTrait
             'attributes'    => $this->getJsonAttributes(),
             'id'            => $this->getJsonApiId(),
             'type'          => $this->getJsonApiType(),
-            'relationships' => $this->getJsonApiRelationShips(),
+            'relationships' => $this->getJsonApiRelationships(),
             'meta'          => $this->getJsonApiMeta(),
             'links'         => $this->getJsonApiLinks(),
         ];

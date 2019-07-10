@@ -12,7 +12,7 @@ interface ResourceObjectInterface extends JsonSerializable
 
     public function getJsonAttributes(): array;
 
-    public function getJsonApiRelationShips(): array;
+    public function getJsonApiRelationships(): array;
 
     public function getJsonApiLinks(): array;
 
